@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RAP - Documentation</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quick Start Guide for RAP">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- FontAwesome JS -->
+    <script defer src="assets/fontawesome/js/all.js"></script>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">  
+    <link rel="stylesheet" href="assets/plugins/simplelightbox/simple-lightbox.min.css">
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+</head> 
+
+<body class="body-green">
+    <div class="page-wrapper">
+        <!-- ******Header****** -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="index.html">
+                            <span aria-hidden="true" class="icon_documents_alt icon"></span>
+                            <span class="text-highlight">RAP</span><span class="text-bold">Docs</span>
+                        </a>
+                    </h1>
+                </div><!--//branding-->
+                
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Quick Start</li>
+                </ol>
+                
+                <div class="top-search-box">
+                 <form class="form-inline search-form justify-content-center" action="" method="get">
+                    <input type="text" placeholder="Search..." name="search" class="form-control search-input">
+                    <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div><!--//container-->
+    </header><!--//header-->
+
+    <div class="doc-wrapper">
+        <div class="container">
+            <div id="doc-header" class="doc-header text-center">
+                <h1 class="doc-title"><i class="icon fa fa-rocket"></i> Quick Start</h1>
+                <div class="meta"><i class="far fa-clock"></i> Last updated: Today</div>
+            </div><!--//doc-header-->
+
+            <div class="doc-body row">
+                <div class="doc-content col-md-9 col-12 order-1">
+                    <div class="content-inner">
+
+                        <!-- Important Note Section -->
+                        <section id="important-note-section" class="doc-section">
+                            <h2 class="section-title">Important Note on Nav2 & TurtleBot3</h2>
+                            <div class="callout-block callout-warning">
+                                <div class="icon-holder">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="content">
+                                    <h4 class="callout-title">Nav2 & TurtleBot3 Known Issues</h4>
+                                    <p>Due to known issues with DDS and configuration settings for <code>robot_model_type</code> in Nav2, we recommend watching this <a href="https://www.youtube.com/watch?v=idQb2pB-h2Q&ab_channel=RoboticsBack-End" target="_blank">video tutorial by Robotics Back-End</a>. This tutorial provides solutions and workarounds for setup bugs that may occur with Nav2 and TurtleBot3.</p>
+                                </div><!--//content-->
+                            </div><!--//callout-block-->
+                        </section>
+
+                        <!-- Installation Section -->
+                        <section id="installation-section" class="doc-section">
+                            <h2 class="section-title">Installation</h2>
+                            <p>Follow these steps to install and configure the ROS2-Agent.</p>
+
+                            <div id="step1" class="section-block">
+                                <h3 class="block-title">1. Install Required Dependencies</h3>
+                                <p>Ensure you have the following installed:</p>
+                                <ul>
+                                    <li><a href="https://docs.ros.org/en/humble/Installation.html" target="_blank">ROS 2 Humble</a></li>
+                                    <li><a href="https://plansys2.github.io/build_instructions/index.html" target="_blank">PlanSys2</a></li>
+                                    <li>Nav2 Stack</li>
+                                    <li>TurtleBot3</li>
+                                </ul>
+                            </div>
+
+                            <div id="step2" class="section-block">
+                                <h3 class="block-title">2. Set Environment Variables</h3>
+                                <p>Create a `.env` file and add the following variable:</p>
+                                <pre><code class="language-bash">OPENAI_API_KEY=your_api_key_here</code></pre>
+                            </div>
+
+                            <div id="step3" class="section-block">
+                                <h3 class="block-title">3. Modify Plansys2 for TCP Support</h3>
+                                <p>Replace the <code>plansys2_terminal</code> package:</p>
+                                <pre><code class="language-bash">
+                                    cp -r plansys2_packages_changes/plansys2_terminal ~/plansys2ws/src/ros2_planning_system
+                                    colcon build --packages-select plansys2_terminal --symlink-install
+                                </code></pre>
+                            </div>
+
+                            <div id="step4" class="section-block">
+                                <h3 class="block-title">4. Install the ROS2 Application</h3>
+                                <p>Copy the ROS2 application to your Plansys2 workspace:</p>
+                                <pre><code class="language-bash">
+                                    cp -r ros_application/workshop_plansys2 ~/plansys2ws/src/
+                                    colcon build --packages-select workshop_plansys2 --symlink-install
+                                </code></pre>
+                            </div>
+                        </section><!--//installation-section-->
+
+                        <!-- Deployment Section -->
+                        <section id="deployment-section" class="doc-section">
+                            <h2 class="section-title">Deployment</h2>
+                            <p>Open multiple terminal windows to launch each component.</p>
+
+                            <div id="step1" class="section-block">
+                                <h3 class="block-title">1. Launch the Simulation</h3>
+                                <pre><code class="language-bash">
+                                    ros2 launch workshop_plansys2 workshop.launch.py  
+                                </code></pre>
+                            </div>
+
+                            <div id="step2" class="section-block">
+                                <h3 class="block-title">2. Start Nav2 Stack</h3>
+                                <pre><code class="language-bash">
+                                    ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=<your_clone_location>/maps/workshop.yaml params_file:=<your_plansys2_workspace>/src/workshop_plansys2/params/nav2_params.yaml
+                                    </code></pre>
+                                </div>
+
+                                <div id="step3" class="section-block">
+                                    <h3 class="block-title">3. Start Plansys2 Controller</h3>
+                                    <pre><code class="language-bash">
+                                        ros2 launch workshop_plansys2 plansys2_bt_example_launch.py  
+                                    </code></pre>
+                                </div>
+
+                                <div id="step4" class="section-block">
+                                    <h3 class="block-title">4. Run Plansys2 Terminal</h3>
+                                    <pre><code class="language-bash">
+                                        ros2 run plansys2_terminal plansys2_terminal
+                                    </code></pre>
+                                </div>
+
+                                <div id="step5" class="section-block">
+                                    <h3 class="block-title">5. Run the Python Agent</h3>
+                                    <pre><code class="language-bash">
+                                        python main.py
+                                    </code></pre>
+                                    <p>Once running, enter a command in natural language to control the robot.</p>
+                                </div>
+                            </section><!--//deployment-section-->
+                        </div><!--//content-inner-->
+                    </div><!--//doc-content-->
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+    </div><!--//page-wrapper-->
+    <footer class="footer text-center">
+        <div class="container">
+            <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+            <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"></i> by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
+            
+        </div><!--//container-->
+    </footer><!--//footer-->
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RAP - Showcase</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Implementation guide for RAP - ROS2 Agent Planner">
+    <meta name="author" content="RAP Development Team">    
+    <link rel="shortcut icon" href="favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <!-- FontAwesome JS -->
+    <script defer src="assets/fontawesome/js/all.js"></script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">  
+    <link rel="stylesheet" href="assets/plugins/simplelightbox/simple-lightbox.min.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+</head> 
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Header -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="index.html">
+                            <span aria-hidden="true" class="icon_documents_alt icon"></span>
+                            <span class="text-highlight">RAP</span><span class="text-bold"> Showcase</span>
+                        </a>
+                    </h1>
+                </div><!--//branding-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Showcase</li>
+                </ol>
+                <div class="top-search-box">
+                   <form class="form-inline search-form justify-content-center" action="" method="get">
+                    <input type="text" placeholder="Search..." name="search" class="form-control search-input">
+                    <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div><!--//container-->
+    </header><!--//header-->
+
+    <div class="doc-wrapper">
+        <div class="container">
+            <div id="doc-header" class="doc-header text-center">
+                <h1 class="doc-title"><span aria-hidden="true" class="icon icon_genius"></span> Workshop example RAP</h1>
+            </div><!--//doc-header-->
+
+            <div id="guide" class="doc-body row">
+                <div class="doc-content col-md-9 col-12 order-1">
+                    <div class="content-inner">
+
+                        <section id="project-overview-section" class="doc-section">
+                            <h2 class="section-title">0. Project Overview</h2>
+                            <p>
+                                The <strong>ROS Agent Planner (RAP)</strong> is an AI-powered robotic system designed to assist humans in a <em>workshop environment</em>. 
+                                Using <strong>natural language commands</strong>, users can instruct the robot to <strong>locate, retrieve, and transport tools</strong> between predefined 
+                                zones in the workspace. The system leverages <span class="text-primary">ROS2</span>, <span class="text-primary">PlanSys2</span>, and 
+                                <span class="text-primary">LangChain</span> to facilitate intelligent planning and execution.
+                            </p>
+
+                            <h3>Workshop Environment</h3>
+                            <p>
+                                The workspace consists of several <strong>predefined zones</strong>, each representing a <em>functional area</em> in the workshop. 
+                                The robot uses these zones for navigation and task execution.
+                            </p>
+
+                            <ul>
+                                <li><strong>Entrance:</strong> The starting position for the robot.</li>
+                                <li><strong>Tables (table_01, table_02, ...):</strong> Workbenches where tools and materials are placed.</li>
+                                <li><strong>Recharge Zone:</strong> A designated area where the robot can <em>recharge its battery</em>.</li>
+                                <li><strong>Trash Area:</strong> A disposal zone for <em>discarding unnecessary items</em>.</li>
+                            </ul>
+
+                            <h3>Robot Capabilities</h3>
+                            <p>
+                                The robot is equipped with <strong>autonomous navigation</strong>, <strong>object manipulation</strong>, and <strong>human interaction</strong> capabilities. 
+                                It follows a structured process to ensure efficient execution of tasks.
+                            </p>
+
+                            <h4>Example Tasks:</h4>
+                            <ul>
+                                <li><strong>Locating Tools:</strong> The robot scans a zone and reports the available objects.</li>
+                                <li><strong>Transporting Objects:</strong> It moves tools from one workbench to another.</li>
+                                <li><strong>Battery Management:</strong> The robot autonomously <em>navigates to the recharge zone</em> when necessary.</li>
+                            </ul>
+
+                            <h3>Interaction with the Robot</h3>
+                            <p>
+                                The system enables <strong>seamless communication</strong> between humans and the robot through <strong>natural language processing</strong>.
+                                Users can issue commands such as:
+                            </p>
+
+                            <pre><code class="language-text">
+                                "Find the wrench."
+                                "Move the hammer to table_02."
+                                "Scan the area and list all objects."
+                                "Take the drill to the repair station."
+                            </code></pre>
+
+                            <p>
+                                The agent <strong>interprets these commands</strong>, translates them into <span class="text-primary">PDDL (Planning Domain Definition Language)</span>, 
+                                and generates a <strong>task plan</strong> that is executed by the robot.
+                            </p>
+
+                            <h3>System Architecture</h3>
+                            <p>
+                                The RAP system integrates multiple components to achieve autonomous task execution:
+                            </p>
+
+                            <ul>
+                                <li><strong>Natural Language Agent:</strong> A LangChain-powered AI that processes user commands and generates PDDL tasks.</li>
+                                <li><strong>PlanSys2 Planner:</strong> A <em>classical AI planner</em> that computes the optimal sequence of actions.</li>
+                                <li><strong>ROS2 Navigation:</strong> A navigation stack that enables the robot to move between zones.</li>
+                                <li><strong>Gazebo Simulation:</strong> A physics-based environment where the robot interacts with objects.</li>
+                            </ul>
+
+                            <h3>How RAP Works</h3>
+                            <p>The workflow of RAP follows a structured loop:</p>
+                            <ol>
+                                <li>The user provides a <strong>task request</strong> in natural language.</li>
+                                <li>The agent <strong>analyzes</strong> the request and generates <strong>PDDL goals</strong>.</li>
+                                <li>PlanSys2 computes the <strong>optimal plan</strong> to achieve the goal.</li>
+                                <li>The robot <strong>executes the plan</strong> by navigating and interacting with objects.</li>
+                                <li>The system <strong>provides feedback</strong> to the user and awaits further commands.</li>
+                            </ol>
+
+                            <h3>Customization and Future Work</h3>
+                            <p>
+                                The RAP system is <strong>modular</strong> and can be adapted to different environments. Future work includes:
+                            </p>
+                            <ul>
+                                <li>Integrating <strong>computer vision</strong> for object recognition.</li>
+                                <li>Implementing <strong>manipulation abilities</strong> for picking up tools.</li>
+                                <li>Supporting <strong>parallel exectuion</strong> for more complex interactions.</li>
+                            </ul>
+
+                            <p>With these improvements, RAP aims to become a versatile assistant for workshop environments.</p>
+
+                        </section>
+
+
+
+                        <section id="params-section" class="doc-section">
+                            <h2 class="section-title">1. Configuring `params.yaml`</h2>
+                            <p>The `params.yaml` file defines waypoints for navigation and execution. These waypoints must be customized for a new environment.</p>
+
+                            <h4>Example `params.yaml`</h4>
+                            <pre><code class="language-yaml">
+                                move:
+                                ros__parameters:
+                                plugins:
+                                - plansys2_scan_bt_node
+                                - plansys2_move_bt_node
+                                waypoints: ["entrance", "table_01", "table_02", "table_03", "table_04", "table_05", "recharge_zone", "init_zone", "trash"]
+                                waypoint_coords:
+                                entrance: [2.4, -1.9, 0.0]
+                                table_01: [1.2, 1.70, 0.0]
+                                table_02: [2.4, -0.4, 0.0]
+                                recharge_zone: [1.86, -1.9, 0.0]
+                                init_zone: [0.0, 0.0, 0.0]
+                                trash: [-2.2, 0.76, 0.0]
+                            </code></pre>
+                            <h4>Modifications for a New Environment</h4>
+                            <ul>
+                                <li>Update <strong>waypoints</strong> to match new locations.</li>
+                                <li>Modify <strong>coordinates</strong> to reflect the real-world positions of key areas.</li>
+                                <li>Specify your <strong>actions</strong> to reflect the ones in your pddl file.</li>
+                            </ul>
+                        </section>
+
+                        <section id="domain-section" class="doc-section">
+                            <h2 class="section-title">2. Defining the Domain (PDDL)</h2>
+                            <p>The PDDL domain defines the robot’s capabilities and planning logic.</p>
+
+                            <h4>Example `domain.pddl`</h4>
+                            <pre><code class="language-pddl">
+                                (define (domain simple)
+                                (:requirements :strips :typing :adl :fluents :durative-actions)
+
+                                (:types robot piece zone)
+
+                                (:predicates
+                                (robot_available ?r - robot)
+                                (battery_full ?r - robot)
+                                (robot_at ?r - robot ?z - zone)
+                                (piece_at ?p - piece ?z - zone)
+                                (is_recharge_zone ?z - zone)
+                                (is_tool_zone ?z - zone)
+                                )
+
+                                (:durative-action move
+                                :parameters (?r - robot ?z1 ?z2 - zone)
+                                :duration ( = ?duration 5)
+                                :condition (and (at start(robot_at ?r ?z1)) (at start(robot_available ?r)))
+                                :effect (and (at start(not(robot_at ?r ?z1))) (at end(robot_at ?r ?z2)))
+                                )   
+
+                                (:durative-action transport
+                                :parameters (?r - robot ?p - piece ?z1 ?z2 - zone)
+                                :duration ( = ?duration 5)
+                                :condition (and (over all(battery_full ?r)) (over all(is_tool_zone ?z2)))
+                                :effect (and (at start(not(piece_at ?p ?z1))) (at end(piece_at ?p ?z2)))
+                                )
+
+                                (:durative-action recharge
+                                :parameters (?r - robot ?z - zone)
+                                :duration ( = ?duration 5)
+                                :condition (and (at start(is_recharge_zone ?z)) (at start(robot_available ?r)))
+                                :effect (and (at end(battery_full ?r)))
+                                )
+                                )
+                            </code></pre>
+
+                            <h4>Customizing the Domain</h4>
+                            <ul>
+                                <li>Update the file to match your problem domain.</li>
+                            </ul>
+                        </section>
+
+                        <section id="behavior-trees-section" class="doc-section">
+                            <h2 class="section-title">3. Defining Behavior Trees (BTs)</h2>
+                            <p>
+                                Behavior Trees (BTs) define the execution flow of robotic tasks in PlanSys2. They consist of 
+                                a sequence of primitive actions that guide the robot’s behavior. Below is an example of 
+                                a simple movement sequence:
+                            </p>
+
+                            <h4>Example: Move Behavior Tree (`move.xml`)</h4>
+                            <pre><code class="language-xml">
+                                &lt;root BTCPP_format="4" main_tree_to_execute = "MainTree" &gt;
+                                &lt;BehaviorTree ID="MainTree"&gt;
+                                &lt;Sequence name="root_sequence"&gt;
+                                &lt;Scan name="scan"/&gt;
+                                &lt;Move name="move" goal="{arg2}"/&gt;
+                                &lt;Scan name="scan"/&gt;
+                                &lt;/Sequence&gt;
+                                &lt;/BehaviorTree&gt;
+                                &lt;/root&gt;
+                            </code></pre>
+
+                            <h4>Customizing Behavior Trees</h4>
+                            <p>To modify the behavior trees for a new task or environment:</p>
+                            <ul>
+                                <li>Add or remove primitive actions (`Scan`, `Move`, `Load`, `Unload`).</li>
+                                <li>Modify sequence flow based on task complexity.</li>
+                                <li>Ensure goal parameters (`{arg1}`, `{arg2}`, `{arg3}`) match the new domain.</li>
+                            </ul>
+
+                            <p>Behavior Trees provide a modular and reusable way to structure robotic actions, making them easy to adapt to different scenarios.</p>
+
+                        </section>
+
+                        <section id="ros-nodes-section" class="doc-section">
+                            <h2 class="section-title">4. Implementing ROS2 Nodes</h2>
+                            <p>
+                                RAP integrates with ROS2 through various nodes responsible for executing actions within the behavior trees. 
+                                These nodes interact with the Gazebo simulation environment, the navigation system, and the planner.
+                            </p>
+
+                            <h4>Example: Move Node (`Move.cpp`)</h4>
+                            <p>The `Move` node allows the robot to navigate to a target waypoint using the Nav2 stack. It retrieves the robot’s position from Gazebo and determines if the goal has been reached.</p>
+                            
+                            <pre><code class="language-cpp">
+
+                                // Copyright 2019 Intelligent Robotics Lab
+                                //
+                                // Licensed under the Apache License, Version 2.0 (the "License");
+                                // you may not use this file except in compliance with the License.
+                                // You may obtain a copy of the License at
+                                //
+                                //     http://www.apache.org/licenses/LICENSE-2.0
+                                //
+                                // Unless required by applicable law or agreed to in writing, software
+                                // distributed under the License is distributed on an "AS IS" BASIS,
+                                // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+                                // See the License for the specific language governing permissions and
+                                // limitations under the License.
+
+
+                                // Move.cpp - ROS2 Node for Navigation
+                                #include "workshop_plansys2/behavior_tree_nodes/Move.hpp"
+                                #include "geometry_msgs/msg/pose2_d.hpp"
+                                #include "gazebo_msgs/srv/get_entity_state.hpp"
+                                #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+
+                                namespace workshop_plansys2
+                                {
+
+                                    Move::Move(
+                                    const std::string & xml_tag_name,
+                                    const std::string & action_name,
+                                    const BT::NodeConfiguration & conf)
+                                    : plansys2::BtActionNode<nav2_msgs::action::NavigateToPose>(xml_tag_name, action_name, conf)
+                                        {
+                                            rclcpp_lifecycle::LifecycleNode::SharedPtr node;
+                                            if (!config().blackboard->get("node", node)) {
+                                                RCLCPP_ERROR(rclcpp::get_logger("Move"), "Failed to get 'node' from the blackboard");
+                                                throw std::runtime_error("Node is required for Move constructor");
+                                            }
+
+                                            // Wait for the Gazebo service to be available
+                                            get_entity_state_client_ = node->create_client&lt;gazebo_msgs::srv::GetEntityState&gt;("/demo/get_entity_state");
+                                            while (!get_entity_state_client_->wait_for_service(std::chrono::seconds(1))) {
+                                                RCLCPP_WARN(node->get_logger(), "Waiting for /demo/get_entity_state service...");
+                                            }
+                                        }
+
+                                        BT::NodeStatus
+                                        Move::on_tick()
+                                        {
+                                            rclcpp_lifecycle::LifecycleNode::SharedPtr node;
+                                            if (!config().blackboard->get("node", node)) {
+                                                RCLCPP_ERROR(node_->get_logger(), "Failed to get 'node' from the blackboard");
+                                            }
+
+                                            // Prepare and send the request to Gazebo
+                                            auto request = std::make_shared&lt;gazebo_msgs::srv::GetEntityState::Request&gt;();
+                                            request->name = "burger"; 
+
+                                            get_entity_state_client_->async_send_request(
+                                            request,
+                                            [node, this](rclcpp::Client&lt;gazebo_msgs::srv::GetEntityState&gt;::SharedFuture future) {
+                                                try {
+                                                    auto result = future.get();
+                                                    geometry_msgs::msg::Point current_position = result->state.pose.position;
+                                                    double distance = calculate_distance(current_position, goal_.pose.pose.position);
+
+                                                    // If the robot is close to the goal, mark success
+                                                    if (distance < 0.5) {
+                                                        this->setStatus(BT::NodeStatus::SUCCESS);
+                                                    }
+                                                } catch (const std::exception &e) {
+                                                    RCLCPP_ERROR(node->get_logger(), "Failed to get entity state: %s", e.what());
+                                                }
+                                            });
+
+                                            return BT::NodeStatus::RUNNING;
+                                        }
+
+                                        // Function to calculate Euclidean distance
+                                        double Move::calculate_distance(const geometry_msgs::msg::Point &p1, const geometry_msgs::msg::Point &p2)
+                                        {
+                                            double dx = p1.x - p2.x;
+                                            double dy = p1.y - p2.y;
+                                            double dz = p1.z - p2.z;
+                                            return std::sqrt(dx * dx + dy * dy + dz * dz);
+                                        }
+
+                                    } // namespace workshop_plansys2
+                                </code></pre>
+
+                                <h4>Customizing ROS2 Nodes</h4>
+                                <ul>
+                                    <li>Write your own ROS2 nodes as you would for any other application.</li>
+                                </ul>
+
+                            </section>
+
+                            <section id="agent-tools-section" class="doc-section">
+                                <h2 class="section-title">5. Implementing Agent Tools in Python</h2>
+                                <p>
+                                    The RAP agent interacts with the planning system using a set of Python tools. These tools serve as 
+                                    an interface between the LLM agent and the planner, enabling natural language commands 
+                                    to be converted into PDDL-compatible goals and queries.
+                                </p>
+
+                                <h4>Example: Setting Goals (`set_goals`)</h4>
+                                <p>
+                                    The `set_goals` function allows the agent to define multiple objectives in the planner system.
+                                    It converts natural language commands into PDDL predicates, ensuring that the planner 
+                                    can interpret and generate valid plans.
+                                </p>
+
+                                <pre><code class="language-python">
+                                    @tool
+                                    def set_goals(goals: list[str]) -> str:
+                                    """Set multiple goals based on the domain to achieve so the planner system can generate a plan.
+                                    The syntax should follow <predicate> <parameters>, for example: 'piece_at hammer table_01'.
+                                        """
+                                        formatted_goals = "".join([f"({goal.strip()})" for goal in goals])
+                                        command = f""" set goal (and {formatted_goals}) 
+                                        get problem goal """
+                                        return call_server(command.encode('utf-8')) 
+                                    </code></pre>
+
+                                    <h4>Retrieving the PDDL Domain (`get_domain`)</h4>
+                                    <p>
+                                        This tool fetches the PDDL domain file from the planner. The agent can use this to verify the available predicates and actions before generating a plan.
+                                    </p>
+
+                                    <pre><code class="language-python">
+                                        @tool
+                                        def get_domain(goal: str) -> str:
+                                        """Retrieve the PDDL domain to check available predicates and durative actions."""
+                                        return call_server(b'get domain')
+                                    </code></pre>
+
+                                    <h4>Fetching the Current Plan (`get_plan`)</h4>
+                                    <p>
+                                        Once goals are set, the agent can query the planner to obtain the sequence of actions required to complete the task.
+                                    </p>
+
+                                    <pre><code class="language-python">
+                                        @tool
+                                        def get_plan() -> str:
+                                        """Retrieve the generated plan for the current goal."""
+                                        return call_server(b'get plan')
+                                    </code></pre>
+
+
+                                    <h4>Customizing Agent Tools</h4>
+                                    <p>To adapt the agent tools for a different use case:</p>
+                                    <ul>
+                                        <li>Write any valid python functions and annotate it with the LangChain @tool decorator.</li>
+                                    </ul>
+
+                                    <p>These Python tools provide the interface between the natural language processing agent and the classical planner, allowing seamless human-robot interaction.</p>
+
+                                </section>
+
+                                <section id="agent-implementation-section" class="doc-section">
+                                    <h2 class="section-title">6. Implementing the Agent</h2>
+                                    <p>
+                                        The RAP agent is responsible for translating natural language commands into PDDL-compatible goals and
+                                        interacting with the planner to execute tasks. It is built using LangChain and integrates with OpenAI's GPT-4o
+                                        to process user queries.
+                                    </p>
+
+                                    <h4>Example: Agent Code (`agent.py`)</h4>
+                                    <p>
+                                        The following code initializes a ReAct agent that:
+                                    </p>
+                                    <ul>
+                                        <li>Receives commands from the user.</li>
+                                        <li>Uses LangChain tools to fetch the PDDL domain, set goals, and get plans.</li>
+                                        <li>Asks for user confirmation before executing plans.</li>
+                                        <li>Maintains short-term memory to track previous user interactions.</li>
+                                    </ul>
+
+                                    <pre><code class="language-python">
+                                        # Import necessary libraries
+                                        from langchain_openai import ChatOpenAI
+                                        from dotenv import load_dotenv
+                                        from langchain_core.messages import HumanMessage
+                                        from langgraph.checkpoint.memory import MemorySaver
+                                        from langgraph.prebuilt import create_react_agent
+                                        import os
+
+                                        # Import tools for planner interaction
+                                        from tools.problem_expert import get_plan, run, get_problem_predicates, \
+                                        get_problem_instances, set_goals, get_domain, scan
+                                        from utils.tcp_server import init
+
+                                        # Load environment variables from .env file
+                                        load_dotenv()
+                                        api_key = os.getenv('OPENAI_API_KEY')
+
+                                        # Initialize the language model
+                                        model = ChatOpenAI(model="gpt-4o")
+
+                                        # Define tools for interacting with the planner
+                                        tools = [scan, get_domain, run, get_plan, get_problem_predicates, get_problem_instances, set_goals]
+
+                                        # Define system prompt for the agent
+                                        system_prompt = (
+                                        "You are a bridge between a classical planner and a user. "
+                                        "The user writes requests in natural language, and you call the corresponding tools, "
+                                        "generating the required PDDL code accordingly. "
+                                        "When a user requests an action, return the generated plan along with a natural language explanation. "
+                                        "Ask the user for confirmation before executing the plan. "
+                                        "Only after user consent, execute the plan using the 'run' tool."
+                                        )
+
+                                        # Configure agent memory
+                                        memory = MemorySaver()
+                                        config = {"configurable": {"thread_id": "test-thread"}}
+
+                                        # Create the ReAct-based LangChain agent
+                                        agent_executor = create_react_agent(model, tools, state_modifier=system_prompt, checkpointer=memory)
+
+                                        # Start the TCP server to interact with the planner
+                                        init()
+
+                                        # Run the agent in a loop for user interaction
+                                        print("Write a command in natural language:")
+                                        while True:
+                                        user_input = input(str())
+                                        response = agent_executor.invoke(
+                                        {"messages": [HumanMessage(content=user_input)]},
+                                        config)
+                                        print(response["messages"][-1].content)
+                                    </code></pre>
+
+                                    <h4>Agent Workflow</h4>
+                                    <ol>
+                                        <li>The user provides a command in natural language.</li>
+                                        <li>The agent translates the request into PDDL-compatible predicates using the available tools.</li>
+                                        <li>It queries the planner for the current domain, problem state, and available plans.</li>
+                                        <li>A plan is generated and presented to the user in natural language.</li>
+                                        <li>Once the user confirms, the agent executes the plan by calling the `run` tool.</li>
+                                    </ol>
+
+                                    <h4>Customizing the Agent</h4>
+                                    <p>To modify the agent for different tasks:</p>
+                                    <ul>
+                                        <li>Change the system prompt to adapt to different domains.</li>
+                                        <li>Add new tools for interacting with additional ROS2 services.</li>
+                                        <li>Modify how the agent validates and confirms user commands.</li>
+                                    </ul>
+
+                                    <p>This agent provides a powerful bridge between human users and classical AI planning systems, allowing seamless control over robots using natural language.</p>
+
+                                </section>
+
+
+
+                                <section id="agent-example-section" class="doc-section">
+                                    <h2 class="section-title">7. Example</h2>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/mk0GumvzNWE?rel=0&amp;controls=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                </section>
+
+
+
+
+                            </div><!--//content-inner-->
+                        </div><!--//doc-content-->
+
+                        <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                            <div id="doc-nav" class="doc-nav">
+                                <ul id="doc-menu" class="nav doc-menu flex-column sticky">
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#project-overview-section">0. Project Overview</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#params-section">1. Configuring `params.yaml`</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#domain-section">2. Defining the Domain (PDDL)</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#behavior-trees-section">3. Behavior Trees (BT)</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#ros-nodes-section">4. ROS2 Nodes</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#tools-section">5. Defining Tools (Python Side)</a></li>
+                                    <li class="nav-item"><a class="nav-link scrollto" href="#agent-section">6. Agent Implementation</a></li>
+                                </a></li>
+                                <li class="nav-item"><a class="nav-link scrollto" href="#agent-example-section">7. Example </a></li>
+                            </ul><!--//doc-menu-->
+                        </div>
+                    </div><!--//doc-sidebar-->
+
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+    </div><!--//page-wrapper-->
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+            <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"></i> by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
+            
+        </div><!--//container-->
+    </footer><!--//footer-->
+</body>
+</html> 
